@@ -59,6 +59,11 @@
       "id": 12,
       "url": "https://www.ai-marketpro.space/api/backup",
       "name": "AI Market Pro"
+    },
+    {
+      "id": 13,
+      "url": "https://www.payforeign.com/api/backup",
+      "name": "PayForeign"
     }
   ]
 }
