@@ -34,7 +34,7 @@ export default function Home() {
         })
       });
     };
-    
+
     sendInitialMessage();
     fetchWebsites();
   }, []);
@@ -46,7 +46,7 @@ export default function Home() {
       const data = await response.json();
       setWebsites(data.websites);
       addLog(`Successfully loaded ${data.websites.length} websites`);
-      
+
       if (!isProcessing) {
         setIsProcessing(true);
         processWebsites(data.websites);
@@ -101,7 +101,7 @@ export default function Home() {
       await fetch('/api/telegram', {
         method: 'POST',
         body: JSON.stringify({
-          message: `Starting to process website: ${website.name} (${website.url})`
+          message: `✅ *${website.name}* (${website.url})`
         })
       });
 
@@ -122,13 +122,6 @@ export default function Home() {
     } catch (error) {
       const errorMessage = `Failed to process ${website.name}: ${error}`;
       addLog(errorMessage);
-      
-      await fetch('/api/telegram', {
-        method: 'POST',
-        body: JSON.stringify({
-          message: `Failed to process ${website.name}: ${error}`
-        })
-      });
 
       setResults(prev => new Map(prev.set(website.id, 'Failed')));
     } finally {
