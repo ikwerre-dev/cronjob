@@ -13,8 +13,7 @@
 # testing
 /coverage
 
-/data/*
-
+ 
 # next.js
 /.next/
 /out/
@@ -25,6 +24,9 @@
 # misc
 .DS_Store
 *.pem
+
+
+/data/*
 
 data/*.json
 
