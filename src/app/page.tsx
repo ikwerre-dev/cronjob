@@ -23,12 +23,24 @@ export default function Home() {
   const [results, setResults] = useState<Map<number, string>>(new Map());
   const [logs, setLogs] = useState<string[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [allWebsites, setAllWebsites] = useState<Website[]>([]);
 
   const addLog = (message: string) => {
     setLogs(prev => [...prev, `${new Date().toISOString()} - ${message}`]);
   };
 
   useEffect(() => {
+    const sendInitialMessage = async () => {
+      const currentTime = new Date().toISOString();
+      await fetch('/api/telegram', {
+        method: 'POST',
+        body: JSON.stringify({
+          message: `--starting--\n--${currentTime}--`
+        })
+      });
+    };
+    
+    sendInitialMessage();
     fetchWebsites(currentPage);
   }, [currentPage]);
 
@@ -38,11 +50,12 @@ export default function Home() {
       const response = await fetch(`/api/websites?page=${page}`);
       const data = await response.json();
       setPageData(data);
+      setAllWebsites(prev => [...prev, ...data.websites]);
       addLog(`Successfully loaded page ${page}`);
       
       if (!isProcessing) {
         setIsProcessing(true);
-        processWebsites(data.websites);
+        processWebsites([...data.websites]);
       }
     } catch (error) {
       const errorMessage = `Failed to fetch websites: ${error}`;
@@ -56,34 +69,38 @@ export default function Home() {
     const maxConcurrent = 2;
     const active = new Set<Promise<void>>();
 
-    while (processQueue.length > 0 || active.size > 0) {
+    const processNext = async () => {
+      if (processQueue.length === 0) {
+        if (pageData?.hasMore) {
+          setCurrentPage(prev => prev + 1);
+          return;
+        }
+        if (active.size === 0) {
+          await fetch('/api/telegram', {
+            method: 'POST',
+            body: JSON.stringify({
+              message: 'All websites have been processed successfully!'
+            })
+          });
+          setIsProcessing(false);
+          addLog('All websites processed successfully');
+        }
+        return;
+      }
+
       while (active.size < maxConcurrent && processQueue.length > 0) {
         const website = processQueue.shift();
         if (website) {
           const promise = processWebsite(website).then(() => {
             active.delete(promise);
+            processNext();
           });
           active.add(promise);
         }
       }
+    };
 
-      if (active.size > 0) {
-        await Promise.race(active);
-      }
-    }
-
-    if (pageData?.hasMore) {
-      setCurrentPage(prev => prev + 1);
-    } else {
-      await fetch('/api/telegram', {
-        method: 'POST',
-        body: JSON.stringify({
-          message: 'All websites have been processed successfully!'
-        })
-      });
-      setIsProcessing(false);
-      addLog('All websites processed successfully');
-    }
+    await processNext();
   };
 
   const processWebsite = async (website: Website) => {
