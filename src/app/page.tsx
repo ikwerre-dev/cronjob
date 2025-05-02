@@ -11,19 +11,14 @@ interface Website {
 
 interface PageData {
   websites: Website[];
-  currentPage: number;
-  totalPages: number;
-  hasMore: boolean;
 }
 
 export default function Home() {
-  const [pageData, setPageData] = useState<PageData | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [websites, setWebsites] = useState<Website[]>([]);
   const [processing, setProcessing] = useState<Set<number>>(new Set());
   const [results, setResults] = useState<Map<number, string>>(new Map());
   const [logs, setLogs] = useState<string[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [allWebsites, setAllWebsites] = useState<Website[]>([]);
 
   const addLog = (message: string) => {
     setLogs(prev => [...prev, `${new Date().toISOString()} - ${message}`]);
@@ -41,21 +36,20 @@ export default function Home() {
     };
     
     sendInitialMessage();
-    fetchWebsites(currentPage);
-  }, [currentPage]);
+    fetchWebsites();
+  }, []);
 
-  const fetchWebsites = async (page: number) => {
+  const fetchWebsites = async () => {
     try {
-      addLog(`Fetching websites page ${page}`);
-      const response = await fetch(`/api/websites?page=${page}`);
+      addLog('Fetching all websites');
+      const response = await fetch('/api/websites');
       const data = await response.json();
-      setPageData(data);
-      setAllWebsites(prev => [...prev, ...data.websites]);
-      addLog(`Successfully loaded page ${page}`);
+      setWebsites(data.websites);
+      addLog(`Successfully loaded ${data.websites.length} websites`);
       
       if (!isProcessing) {
         setIsProcessing(true);
-        processWebsites([...data.websites]);
+        processWebsites(data.websites);
       }
     } catch (error) {
       const errorMessage = `Failed to fetch websites: ${error}`;
@@ -64,27 +58,21 @@ export default function Home() {
     }
   };
 
-  const processWebsites = async (websites: Website[]) => {
-    const processQueue = [...websites];
+  const processWebsites = async (websiteList: Website[]) => {
+    const processQueue = [...websiteList];
     const maxConcurrent = 2;
     const active = new Set<Promise<void>>();
 
     const processNext = async () => {
-      if (processQueue.length === 0) {
-        if (pageData?.hasMore) {
-          setCurrentPage(prev => prev + 1);
-          return;
-        }
-        if (active.size === 0) {
-          await fetch('/api/telegram', {
-            method: 'POST',
-            body: JSON.stringify({
-              message: 'All websites have been processed successfully!'
-            })
-          });
-          setIsProcessing(false);
-          addLog('All websites processed successfully');
-        }
+      if (processQueue.length === 0 && active.size === 0) {
+        await fetch('/api/telegram', {
+          method: 'POST',
+          body: JSON.stringify({
+            message: 'All websites have been processed successfully!'
+          })
+        });
+        setIsProcessing(false);
+        addLog('All websites processed successfully');
         return;
       }
 
@@ -152,14 +140,14 @@ export default function Home() {
     }
   };
 
-  if (!pageData || !pageData.websites) return <div>Loading...</div>;
+  if (!websites.length) return <div>Loading...</div>;
 
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Website Processor</h1>
 
       <div className="grid gap-4 mb-4">
-        {pageData.websites.map(website => (
+        {websites.map(website => (
           <div key={website.id} className="border p-4 rounded">
             <h2 className="font-bold">{website.name}</h2>
             <p className="text-gray-600">{website.url}</p>
@@ -185,10 +173,6 @@ export default function Home() {
             {log}
           </div>
         ))}
-      </div>
-
-      <div className="mt-4 flex justify-between">
-        <span>Page {currentPage} of {pageData.totalPages}</span>
       </div>
     </div>
   );
