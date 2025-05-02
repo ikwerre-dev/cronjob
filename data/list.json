@@ -1,0 +1,64 @@
+{
+  "websites": [
+    {
+      "id": 1,
+      "url": "https://www.horizontrade.online/api/backup",
+      "name": "Horizontrade"
+    },
+    {
+      "id": 2,
+      "url": "https://www.globaltrademarketing.online/api/backup",
+      "name": "Global Trade Marketing"
+    },
+    {
+      "id": 3,
+      "url": "https://www.bitradingnft.online/api/backup",
+      "name": "Bitrading NFT"
+    },
+    {
+      "id": 4,
+      "url": "https://www.bitflowx.online/api/backup",
+      "name": "BitFlowX"
+    },
+    {
+      "id": 5,
+      "url": "https://www.token-trader.online/api/backup",
+      "name": "Token Trader"
+    },
+    {
+      "id": 6,
+      "url": "https://www.capital-crest-ai.com/api/backup",
+      "name": "Capital Crest AI"
+    },
+    {
+      "id": 7,
+      "url": "https://www.ehrclothing.store/api/backup",
+      "name": "EHR Clothing"
+    },
+    {
+      "id": 8,
+      "url": "https://www.vetemarket.com/api/backup",
+      "name": "Vete Market"
+    },
+    {
+      "id": 9,
+      "url": "https://www.primewealth.pro/api/backup",
+      "name": "Prime Wealth"
+    },
+    {
+      "id": 10,
+      "url": "https://www.elitexcapital.online/api/backup",
+      "name": "Elitex Capital"
+    },
+    {
+      "id": 11,
+      "url": "https://www.bitfox-app.pro/api/backup",
+      "name": "BitFox App"
+    },
+    {
+      "id": 12,
+      "url": "https://www.ai-marketpro.space/api/backup",
+      "name": "AI Market Pro"
+    }
+  ]
+}

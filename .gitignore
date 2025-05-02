@@ -26,9 +26,9 @@
 *.pem
 
 
-/data/*
+# /data/*
 
-data/*.json
+# data/*.json
 
 # debug
 npm-debug.log*
