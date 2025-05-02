@@ -98,25 +98,10 @@ export default function Home() {
     addLog(`Starting to process website: ${website.name} (${website.url})`);
 
     try {
-      await fetch('/api/telegram', {
-        method: 'POST',
-        body: JSON.stringify({
-          message: `✅ *${website.name}* (${website.url})`
-        })
-      });
-
       addLog(`Fetching content from: ${website.url}`);
       const response = await fetch(website.url);
       const result = await response.text();
       addLog(`Successfully fetched content from: ${website.url}`);
-
-      await fetch('/api/telegram', {
-        method: 'POST',
-        body: JSON.stringify({
-          message: `Successfully processed ${website.name}: ${result.substring(0, 100)}...`
-        })
-      });
-
       setResults(prev => new Map(prev.set(website.id, 'Success')));
       addLog(`Successfully processed website: ${website.name}`);
     } catch (error) {
