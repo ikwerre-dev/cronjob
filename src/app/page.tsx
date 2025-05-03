@@ -6,7 +6,7 @@ export const revalidate = 0;
 
 async function fetchWebsites() {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/websites`, {
+    const response = await fetch(`http://localhost:3000/api/websites`, {
       cache: 'no-store'
     });
     const data = await response.json();
