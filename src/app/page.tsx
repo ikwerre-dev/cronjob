@@ -6,7 +6,7 @@ export const revalidate = 0;
 
 async function fetchWebsites() {
   try {
-    const response = await fetch(`http://localhost:3000/api/websites`, {
+    const response = await fetch(`https://cronjob-one.vercel.app/api/websites`, {
       cache: 'no-store'
     });
     const data = await response.json();

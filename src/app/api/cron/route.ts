@@ -4,7 +4,7 @@ export const dynamic = 'force-dynamic';
 
 async function fetchWebsites() {
   try {
-    const response = await fetch(`http://localhost:3000/api/websites`, {
+    const response = await fetch(`https://cronjob-one.vercel.app/api/websites`, {
       cache: 'no-store'
     });
     return await response.json();
@@ -20,7 +20,7 @@ async function processWebsite(website: any) {
     await response.text();
     return 'Success';
   } catch (error) {
-    await fetch('http://localhost:3000/api/telegram', {
+    await fetch('https://cronjob-one.vercel.app/api/telegram', {
       method: 'POST',
       body: JSON.stringify({
         message: `Failed to process ${website.name}: ${error}`
@@ -34,7 +34,7 @@ export async function GET() {
   try {
     const currentTime = new Date().toISOString();
     
-    await fetch('http://localhost:3000/api/telegram', {
+    await fetch('https://cronjob-one.vercel.app/api/telegram', {
       method: 'POST',
       body: JSON.stringify({
         message: `--starting cron job--\n--${currentTime}--`
@@ -50,7 +50,7 @@ export async function GET() {
       })
     );
 
-    await fetch('http://localhost:3000/api/telegram', {
+    await fetch('https://cronjob-one.vercel.app/api/telegram', {
       method: 'POST',
       body: JSON.stringify({
         message: 'Cron job completed successfully!'
