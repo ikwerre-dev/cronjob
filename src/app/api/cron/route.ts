@@ -9,10 +9,12 @@ async function fetchWebsites() {
     });
     return await response.json();
   } catch (error) {
-    console.error('Error fetching websites:', error);
+    console.error('Error fetchoing website:' + error); 
+
     return { websites: [] };
   }
 }
+
 
 async function processWebsite(website: any) {
   try {
