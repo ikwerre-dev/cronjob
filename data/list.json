@@ -64,6 +64,11 @@
       "id": 13,
       "url": "https://www.payforeign.com/api/backup",
       "name": "PayForeign"
+    },
+    {
+      "id": 14,
+      "url": "https://assetsglobalprofits.com/",
+      "name": "Assets Global Profits"
     }
   ]
 }
