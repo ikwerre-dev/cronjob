@@ -62,7 +62,6 @@
     },
     {
       "id": 13,
-      
       "url": "https://www.payforeign.com/api/backup",
       "name": "PayForeign"
     },
@@ -70,6 +69,11 @@
       "id": 14,
       "url": "https://assetsglobalprofits.com/",
       "name": "Assets Global Profits"
+    },
+    {
+      "id": 15,
+      "url": "https://www.bridgewaysmarketpro.com/api/backup",
+      "name": "BridgeWays Market Pro"
     }
   ]
 }
